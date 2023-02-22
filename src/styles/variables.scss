@@ -1,0 +1,79 @@
+// // base color
+// $dark-blue:#2b85e4;
+// $blue: #2d8cf0;
+// $light-blue: #5cadff;
+// $info: #2db7f5;
+// $red: #c03639;
+// $pink: #e65d6e;
+// $green: #19be6b;
+// $tiffany: #4ab7bd;
+// $yellow: #ff9900;
+// $panGreen: #30b08f;
+// $dark-title: #17233d;
+// $content: #515a6e;
+
+// // sidebar
+// $menuText: #bfcbd9;
+// $menuActiveText: $blue;
+// $subMenuActiveText: #ffffff; // https://github.com/ElemeFE/element/issues/12951
+
+// $menuBg: #304156;
+// $menuHover: #263445;
+// $subMenuBg: #1f2d3d;
+// $subMenuHover: #001528;
+// $sideBarWidth: 240px;
+
+
+// // the :export directive is the magic sauce for webpack
+// // https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
+// :export {
+//   menuText: $menuText;
+//   menuActiveText: $menuActiveText;
+//   subMenuActiveText: $subMenuActiveText;
+//   menuBg: $menuBg;
+//   menuHover: $menuHover;
+//   subMenuBg: $subMenuBg;
+//   subMenuHover: $subMenuHover;
+//   sideBarWidth: $sideBarWidth;
+// }
+
+
+// base color
+$dark-blue:#2b85e4;
+$blue: #2d8cf0;
+$light-blue: #5cadff;
+$warning: #E6A23C;
+$info: #2db7f5;
+$red: #c03639;
+$pink: #e65d6e;
+$green: #19be6b;
+$tiffany: #4ab7bd;
+$yellow: #ff9900;
+$panGreen: #30b08f;
+$dark-title: #17233d;
+$content: #515a6e;
+
+// sidebar
+$menuText: #bfcbd9;
+$menuActiveText: $blue;
+$subMenuActiveText: #ffffff;
+
+$menuBg: #214F7D;
+$menuHover: #153C63;
+$subMenuBg: #09233E;
+$subMenuHover: #0E3053;
+$sideBarWidth: 240px;
+
+
+// the :export directive is the magic sauce for webpack
+// https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
+:export {
+  menuText: $menuText;
+  menuActiveText: $menuActiveText;
+  subMenuActiveText: $subMenuActiveText;
+  menuBg: $menuBg;
+  menuHover: $menuHover;
+  subMenuBg: $subMenuBg;
+  subMenuHover: $subMenuHover;
+  sideBarWidth: $sideBarWidth;
+}

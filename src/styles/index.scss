@@ -1,0 +1,393 @@
+@import './variables.scss';
+@import './mixin.scss';
+@import './transition.scss';
+@import './element-ui.scss';
+@import './sidebar.scss';
+@import './btn.scss';
+
+body {
+  height: 100%;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+}
+
+label {
+  font-weight: 700;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+#app {
+  height: 100%;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+.no-padding {
+  padding: 0px !important;
+}
+
+.padding-content {
+  padding: 4px 0;
+}
+
+a:focus,
+a:active {
+  outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
+
+div:focus {
+  outline: none;
+}
+
+.dib {
+  display: inline-block;
+}
+.dn {
+  display: none;
+}
+.fr {
+  float: right;
+}
+
+.fl {
+  float: left;
+}
+
+.tr {
+  text-align: right;
+}
+.tl {
+  text-align: left;
+}
+.tc {
+  text-align: center;
+}
+.tc .el-input__inner{
+  text-align: center;
+}
+.pr-5 {
+  padding-right: 5px;
+}
+
+.pl-5 {
+  padding-left: 5px;
+}
+
+.mb5 {
+  margin-bottom: 5px;
+}
+.mb10 {
+  margin-bottom: 10px;
+}
+.mb20 {
+  margin-bottom: 20px;
+}
+
+.mb40 {
+  margin-bottom: 40px;
+}
+
+.mt0 {
+  margin-top: 0px;
+}
+.mt10 {
+  margin-top: 10px;
+}
+.mt20 {
+  margin-top: 20px;
+}
+.mt22 {
+  margin-top: 22px;
+}
+.mt44 {
+  margin-top: 44px;
+}
+.ml0 {
+  margin-left: 0px !important;
+}
+.ml5 {
+  margin-left: 5px;
+}
+.ml10 {
+  margin-left: 10px;
+}
+.ml20 {
+  margin-left: 20px;
+}
+.ml40 {
+  margin-left: 40px;
+}
+.mr20{
+  margin-right: 20px;
+}
+.p0{
+  padding: 0;
+}
+
+.block {
+  display: block;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.inlineBlock {
+  display: block;
+}
+
+.clearfix {
+  &:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+  }
+}
+
+aside {
+  background: #eef1f6;
+  padding: 8px 24px;
+  margin-bottom: 20px;
+  border-radius: 2px;
+  display: block;
+  line-height: 32px;
+  font-size: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  color: #2c3e50;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  a {
+    color: #337ab7;
+    cursor: pointer;
+
+    &:hover {
+      color: rgb(32, 160, 255);
+    }
+  }
+}
+
+@media (max-width:768px) and (max-width:991px) {
+  .app-container {
+  padding: 15px 10px !important;
+}
+
+// 分页组件
+.el-pagination .el-pagination__total{
+  display: none !important;
+}
+.el-pagination .el-select{
+  display: none;
+}
+.el-pagination span:not([class*=suffix]), .el-pagination button{
+  display: none;
+}
+}
+
+//main-container全局样式
+.app-container {
+  padding: 20px;
+}
+
+.components-container {
+  margin: 30px 50px;
+  position: relative;
+}
+
+.pagination-container {
+  margin-top: 30px;
+}
+
+.text-center {
+  text-align: center
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.sub-navbar {
+  height: 50px;
+  line-height: 50px;
+  position: relative;
+  width: 100%;
+  text-align: right;
+  padding-right: 20px;
+  transition: 600ms ease position;
+  background: linear-gradient(90deg, rgba(32, 182, 249, 1) 0%, rgba(32, 182, 249, 1) 0%, rgba(33, 120, 241, 1) 100%, rgba(33, 120, 241, 1) 100%);
+
+  .subtitle {
+    font-size: 20px;
+    color: #fff;
+  }
+
+  &.draft {
+    background: #d0d0d0;
+  }
+
+  &.deleted {
+    background: #d0d0d0;
+  }
+}
+
+.link-type,
+.link-type:focus {
+  color: #337ab7;
+  cursor: pointer;
+
+  &:hover {
+    color: rgb(32, 160, 255);
+  }
+}
+
+.filter-container {
+  padding-bottom: 10px;
+
+  .filter-item {
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 10px;
+  }
+}
+
+//refine vue-multiselect plugin
+.multiselect {
+  line-height: 16px;
+}
+
+.multiselect--active {
+  z-index: 1000 !important;
+}
+
+.us {
+  user-select: none;
+}
+
+.cp {
+  cursor: pointer;
+}
+
+.ovh {
+  overflow: hidden;
+}
+
+.toe {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+// 文字颜色
+.c-dark-blue{
+  color: $dark-blue;
+}
+.c-blue{
+  color: $blue;
+}
+.c-light-blue{
+  color: $light-blue;
+}
+.c-info{
+  color: $info;
+}
+.c-red{
+  color: $red;
+}
+.c-warning{
+  color: $warning;
+}
+.c-pink{
+  color: $pink;
+}
+.c-green{
+  color: $green;
+}
+.c-tiffany{
+  color: $tiffany;
+}
+.c-yellow{
+  color: $yellow;
+}
+.c-panGreen{
+  color: $panGreen;
+}
+.c-dark-title{
+  color: $dark-title;
+}
+.c-content{
+  color: $content;
+}
+.el-rate__icon{margin-right: 0}
+.el-autocomplete{width: 100%;}
+.table_info{
+  p{
+    margin: 0;
+  }
+}
+.pagination-container{
+  text-align: center;
+}
+
+
+// .el-pagination__total{
+//    @media only screen and (max-width: 767px) {
+//         display: none;
+//     }
+// }
+// .el-pagination .el-pagination__sizes{
+//   @media only screen and (max-width: 767px) {
+//         display: none;
+//     }
+// }
+// .el-pagination__jump{
+//   @media only screen and (max-width: 767px) {
+//         display: none;
+//     }
+// }
+
+
+
+.space_evenly{
+  display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.el-badge__content.is-fixed.is-dot{
+    width: 12px;
+    height: 12px;
+    right: 6px;
+}
+// 解决按钮组嵌套Badge 标记显示效果
+.el-button-group .el-badge>.el-button{
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+.el-button-group .el-badge{
+  margin-left: 1px;
+}
