@@ -38,7 +38,7 @@ export default {
   },
   data() {
     return {
-      upload_qiniu_url:"https://421jz69268.zicp.fun/api/admin/v1/commons/upload_attachment",
+      upload_qiniu_url:process.env.VUE_APP_BASE_API+"/api/admin/v1/commons/upload_attachment",
       headers:{
         Authorization:getToken()
       },

@@ -40,7 +40,8 @@ module.exports = {
             // detail: https://cli.vuejs.org/config/#devserver-proxy
             //[process.env.VUE_APP_BASE_API]: {
             '/api/admin/v1': {
-                target: `https://421jz69268.zicp.fun/`,
+                target: `http://47.97.171.123:3000`,
+                // target: `https://421jz69268.zicp.fun/`,
                 changeOrigin: true,
                 // secure: true,
                 pathRewrite: {

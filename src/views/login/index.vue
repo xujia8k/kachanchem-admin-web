@@ -63,6 +63,7 @@ export default {
       }
     }
     return {
+      url:process.env.VUE_APP_BASE_API,
       loginForm: {
         username: '',
         password: ''
