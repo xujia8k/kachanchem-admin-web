@@ -149,7 +149,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="产品图片" prop="img">
-              <Upload v-model="temp.product_img_url" :id="temp.id" attachmentEntityType="Product Img" :value="temp.product_img_url" />
+              <Upload v-model="temp.product_img_url" :id="temp.id" attachmentEntityType="Product" type="Product Img" :value="temp.product_img_url" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -346,7 +346,7 @@ export default {
         id: null,
         name: null,
         classify: null,
-        reference_price: null,
+        reference_price: 1,
         cas: null,
         purity: null,
         img_url: null,
@@ -413,7 +413,7 @@ export default {
         id: null,
         name: null,
         classify: null,
-        reference_price: null,
+        reference_price: 1,
         cas: null,
         purity: null,
         img_url: null,
@@ -499,6 +499,7 @@ export default {
     updateData(id) {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          this.temp.reference_price? '': this.temp.reference_price=0;
           updateGoods(this.temp, this.temp.id).then(() => {
             for (const v of this.list) {
               if (v.id === this.temp.id) {
@@ -572,7 +573,7 @@ export default {
     async createGoods(data) {
       let temp = {
         name: data.name || '',
-        reference_price: data.reference_price || '',
+        reference_price: data.reference_price? data.reference_price: 0,
         cas: data.cas || '',
         img_url: data.img_url || '',
         content: data.content || '',

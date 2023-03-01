@@ -95,7 +95,7 @@
           </el-col>
           <el-col :span="24">
             <el-form-item label="banner图片" prop="img">
-              <Upload v-model="temp.img_url" :id="temp.id" type="Banner" :value="temp.img_url" />
+              <Upload v-model="temp.img_url" :id="temp.id" type="Banner" attachmentEntityType="Banner" :value="temp.img_url" />
             </el-form-item>
           </el-col>
         </el-row>

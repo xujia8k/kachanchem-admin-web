@@ -43,6 +43,11 @@
           <span>{{ scope.row.created_at }}</span>
         </template>
       </el-table-column> -->
+      <el-table-column label="发送报价时间" min-width="90px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.send_quotation_at }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="公司名称" min-width="200px" align="center" :show-overflow-tooltip='true'>
         <template slot-scope="scope">
           <span>{{scope.row.company_name }}</span>
@@ -101,8 +106,8 @@
         </el-button>
       </div>
     </el-dialog>
-    <!-- 设置运输报告鉴定费 -->
-    <el-dialog title="设置运输报告鉴定费" :close-on-click-modal="false" :visible.sync="dialogFormVisible3" width="70%">
+    <!-- 设置检测费 -->
+    <el-dialog title="设置检测费" :close-on-click-modal="false" :visible.sync="dialogFormVisible3" width="70%">
       <el-form ref="dataForm" :model="temp" label-position="right" label-width="100px">
         <el-row :gutter="20" v-for="(item, index) in testingFeeList">
           <el-col :span="8">
@@ -238,8 +243,14 @@ export default {
       dialogFormVisible3: false,
       dialogFormVisible4: false,
       dialogFormVisible5: false,
-      testingFeeList: [],
-      appraisalFeeList: [],
+      testingFeeList: [{
+        "testing_project": "",
+        "testing_fee": null
+      }],
+      appraisalFeeList: [{
+        "appraisal_project": "",
+        "appraisal_fee": null
+      }],
       exchangeRateList: '',
       dialogStatus: '',
       textMap: {
@@ -360,10 +371,16 @@ export default {
     handleOrderSettings() {
       this.dialogFormVisible2 = true
       testingFee().then(response => {
-        this.testingFeeList = response.data.value
+        let data =response.data.value;
+        if(response.data.value.length>0){
+          this.testingFeeList =data
+        }
       })
       appraisalFee().then(response => {
-        this.appraisalFeeList = response.data.value
+        let data =response.data.value;
+        if(response.data.value>0){
+          this.appraisalFeeList =data
+        }
       })
       exchangeRate().then(response => {
         this.exchangeRateList = response.data.value

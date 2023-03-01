@@ -2,7 +2,7 @@
   <!-- 上传七牛云 -->
   <div class="upload-container">
     <el-upload class="upload-demo" :data="dataObj" drag :action="upload_qiniu_url" :show-file-list="false" :on-success="handleImageSuccess" :on-error="handleError" :before-upload="beforeUpload" :headers="headers"  multiple :limit="3" :file-list="fileList">
-      <!-- <img v-if="imageUrl" :src="imageUrl" class="img"> -->
+      <img v-if="imageUrl" :src="imageUrl" class="img">
       <div class="el-default">
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>

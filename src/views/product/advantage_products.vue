@@ -71,7 +71,7 @@
       </el-table-column>
     </el-table>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" :close-on-click-modal="false" width="90%">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" :close-on-click-modal="false" width="90%" :before-close="onClose">
       <el-form ref="dataForm" :model="temp" label-position="right" label-width="100px">
         <el-row :gutter="20">
           <el-col :span="12">
@@ -98,7 +98,7 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">
+        <el-button @click="onClose">
           取消
         </el-button>
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
@@ -123,9 +123,16 @@ export default {
     productsInfo() {
       return this.$store.state.user.productsInfo;
     },
+  },  
+  props: {
+    showFlag: {
+      type: Boolean
+    }
   },
   watch: {
     showFlag(newVal, oldVal) {
+      debugger
+      console.log(newVal, oldVal)
       newVal ? this.showComponent = true : this.showComponent = false;
       this.dialogVisible = newVal
     }
@@ -215,6 +222,7 @@ export default {
     handleCreate() {
       this.resetTemp()
       this.dialogStatus = 'create'
+      this.showComponent = true
       this.dialogFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
@@ -303,6 +311,7 @@ export default {
       this.showComponent = false;
       this.$store.commit("user/SET_PRODUCTS_INFO", '');
       this.$emit('closeChildDialog')
+      this.dialogFormVisible = false
     },
   }
 }
