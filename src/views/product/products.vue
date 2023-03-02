@@ -49,7 +49,7 @@
       </el-table-column>
       <el-table-column label="产品图片" width="130px" align="center">
         <template slot-scope="scope">
-          <img :src="scope.row.img_url" style="display: block;max-width:110px;height:auto;">
+          <img :src="scope.row.product_img_url" style="display: block;max-width:110px;height:auto;">
         </template>
       </el-table-column>
       <el-table-column label="纯度" width="110px" align="center">

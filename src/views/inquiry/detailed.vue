@@ -1188,10 +1188,10 @@ export default {
         return
       }
       let tem ={
-        inquiry_quotation_ids:that.inquiry_detail_quotation_ids[0]
+        inquiry_quotation_ids:that.inquiry_detail_quotation_ids
       }
-      console.log(tem)
-      console.log(that.inquiry_detail_quotation_ids)
+      // console.log(tem)
+      // console.log(that.inquiry_detail_quotation_ids)
       sendQuotation(tem).then(response => {
         if(response.code == 0){
           that.$message({
