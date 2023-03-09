@@ -42,7 +42,7 @@
       </el-table-column>
     </el-table>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" :close-on-click-modal="false" width="60%" :append-to-body="true">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" :close-on-click-modal="false" width="90%" :append-to-body="true">
       <el-form ref="rules" :rules="rules" :model="temp" label-position="right" label-width="110px">
         <el-row :gutter="20">
           <el-col :span="6">

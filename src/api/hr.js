@@ -8,6 +8,7 @@ export function fetchList(query) {
     params: query
   })
 }
+
 // 通过搜索获取列表
 export function fetchHRList(query) {
   return request({

@@ -15,6 +15,9 @@
         <el-button plain type="info" @click="handleOrderSettings">
           订单设置
         </el-button>
+        <el-button plain type="success" @click="handleSendQuotation">
+          批量发送报价
+        </el-button>
         <!-- <el-button plain :loading="downloadLoading" type="primary" icon="el-icon-download" @click="handleDownload">
           导出
         </el-button> -->
@@ -24,7 +27,125 @@
       </div>
     </div>
     <el-table ref="multipleTable" v-loading="listLoading" :data="list" element-loading-text="拼命加载中" border fit highlight-current-row stripe class="cp" @row-dblclick="showTable" resizable="true">
-      <el-table-column align="center" label="询盘订单号" width="145">
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <el-table :data="props.row.inquiry_quotations" type="index" style="width: 100%;margin-top: 10px" @select="handleSelectionChange" border>
+              <el-table-column type="selection" width="39" />
+              <el-table-column type="expand">
+                <template slot-scope="props">
+                  <el-form label-position="right" inline class="demo-table-expand">
+                    <el-form-item label="产品性状">
+                      <span>{{ props.row.appear_shape }}</span>
+                    </el-form-item>
+                    <el-form-item label="汇率">
+                      <span>{{ props.row.exchange_rate }}</span>
+                    </el-form-item>
+                    <el-form-item label="采购报价/汇率">
+                      <span>{{ props.row.cost_price }}</span>
+                    </el-form-item>
+                    <el-form-item label="采购报价">
+                      <span>{{ props.row.cost_price_usd }}</span>
+                    </el-form-item>
+                    <el-form-item label="利润">
+                      <span>{{ props.row.profit }}</span>
+                    </el-form-item>
+                    <el-form-item label="运费">
+                      <span>{{ props.row.shipping_fee }}</span>
+                    </el-form-item>
+                    <el-form-item label="操作费">
+                      <span>{{ props.row.operating_fee }}</span>
+                    </el-form-item>
+                    <!-- <el-form-item label="检测项目">
+                      <span>{{ props.row.testing_project }}</span>
+                    </el-form-item> -->
+                    <el-form-item label="检测费">
+                      <span>{{ props.row.testing_fee }}</span>
+                    </el-form-item>
+                    <el-form-item label="是否报关">
+                      <span>{{ props.row.is_declare | statusFilter}}</span>
+                    </el-form-item>
+                    <el-form-item label="报关费">
+                      <span>{{ props.row.declare_fee }}</span>
+                    </el-form-item>
+                   <!--  <el-form-item label="鉴定项目">
+                      <span>{{ props.row.appraisal_project }}</span>
+                    </el-form-item> -->
+                    <el-form-item label="鉴定费">
+                      <span>{{ props.row.appraisal_fee }}</span>
+                    </el-form-item>
+                    <el-form-item label="银行手续费">
+                      <span>{{ props.row.bank_fee }}</span>
+                    </el-form-item>
+                    <el-form-item label="是否危险品">
+                      <span>{{ props.row.is_dangerous | statusFilter}}</span>
+                    </el-form-item>
+                    <el-form-item label="存储条件">
+                      <span>{{ props.row.storage }}</span>
+                    </el-form-item>
+                    <el-form-item label="监管条件">
+                      <span>{{ props.row.is_take_charge | isTtakeChargeFilter}}</span>
+                    </el-form-item>
+                    <el-form-item label="HS编码">
+                      <span>{{ props.row.hs_code }}</span>
+                    </el-form-item>
+                    <el-form-item label="原产国">
+                      <span>{{ props.row.country }}</span>
+                    </el-form-item>
+                    <el-form-item label="是否定制">
+                      <span>{{ props.row.is_customized | isCustomizedFilter}}</span>
+                    </el-form-item>
+                    <el-form-item label="货期">
+                      <span>{{ props.row.stock }}</span>
+                    </el-form-item>
+                    <el-form-item label="报价术语">
+                      <span>{{ props.row.incoterms }}</span>
+                    </el-form-item>
+                    <el-form-item label="采购备注">
+                      <span>{{ props.row.purchase_note }}</span>
+                    </el-form-item>
+                  </el-form>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" label="供应商">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.vendor_company_name }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" label="报价时间">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.created_at }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" label="价格">
+                <template slot-scope="scope" v-if="scope.row.price == 0">/</template>
+                <template slot-scope="scope" v-else>
+                  {{ scope.row.price }}
+                </template>
+              </el-table-column>
+              <el-table-column align="center" label="采购报价">
+                <template slot-scope="scope">
+                  {{ scope.row.cost_price }}
+                </template>
+              </el-table-column>
+              <el-table-column align="center" label="规格">
+                <template slot-scope="scope">
+                  {{ scope.row.package }}
+                </template>
+              </el-table-column>
+              <el-table-column align="center" label="纯度">
+                <template slot-scope="scope">
+                  {{ scope.row.purity }}
+                </template>
+              </el-table-column>
+              <el-table-column align="center" label="备注">
+                <template slot-scope="scope">
+                  {{ scope.row.note }}
+                </template>
+              </el-table-column>
+            </el-table>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="询盘订单号" width="90">
         <template slot-scope="scope">
           <span>{{ scope.row.inquiry_no }}</span>
         </template>
@@ -43,17 +164,17 @@
           <span>{{ scope.row.created_at }}</span>
         </template>
       </el-table-column> -->
-      <el-table-column label="发送报价时间" min-width="90px" align="center">
+     <!--  <el-table-column label="发送报价时间" min-width="90px" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.send_quotation_at }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="公司名称" min-width="200px" align="center" :show-overflow-tooltip='true'>
         <template slot-scope="scope">
           <span>{{scope.row.company_name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="客户名称" min-width="200px" align="center" :show-overflow-tooltip='true'>
+      <el-table-column label="客户名称" min-width="100px" align="center" :show-overflow-tooltip='true'>
         <template slot-scope="scope">
           <span>{{ scope.row.first_name}}{{scope.row.last_name }}</span>
         </template>
@@ -78,9 +199,17 @@
           <span>{{ scope.row.package }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="150px" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="负责人" min-width="90px" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.employee_name }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" width="100px" align="center" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
-          <el-button type="primary" size="small" @click.stop.prevent="showTable(row)">
+          <el-button type="success" size="small" @click="handleUpdate3(row)">
+            分配
+          </el-button>
+          <el-button type="primary" class="mt10" size="small" @click.stop.prevent="showTable(row)">
             查看详情
           </el-button>
         </template>
@@ -184,13 +313,30 @@
         </el-button>
       </div>
     </el-dialog>
+
+    <el-dialog title="分配询盘订单负责人" :visible.sync="dialogFormVisible6" :close-on-click-modal="false" width="30%">
+      <el-select ref="select" v-model="employeeId" placeholder="请选择员工">
+        <el-option v-for="item in employeeList" :key="item.id" :label="item.name" :value="item.id" />
+      </el-select>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible6 = false">
+          关闭
+        </el-button>
+        <el-button type="primary" @click="updateDistributeEmployee()">
+          确认
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
-import { fetchList, createInquiries, inquiriesDetails, quotationDetails, addQuotation, updateQuotation, deleteInquiries, testingFee, updateTestingFee, appraisalFee, updateAppraisalFee, exchangeRate, updateExchangeRate } from '@/api/inquiry'
+import { fetchList, createInquiries, inquiriesDetails, quotationDetails, addQuotation, updateQuotation, deleteInquiries, testingFee, updateTestingFee, appraisalFee, updateAppraisalFee, exchangeRate, updateExchangeRate,updateDistributeEemployee,sendQuotation2 } from '@/api/inquiry'
 import { parseTime, isInArray } from '@/utils'
 import Pagination from '@/components/Pagination'
 import Inquiry from '@/components/Inquiry'
+import { updateDistributeEmployee } from '@/api/crm'
+import { fetchHRList } from '@/api/hr'
+
 export default {
   name: '询盘订单',
   components: { Pagination, Inquiry },
@@ -238,11 +384,15 @@ export default {
         limit: 20
       },
       temp: {},
+      employeeId: null,
+      employeeList: {},
+      inquiry_detail_quotation_ids: [], //选中报价详情
       dialogFormVisible: false,
       dialogFormVisible2: false,
       dialogFormVisible3: false,
       dialogFormVisible4: false,
       dialogFormVisible5: false,
+      dialogFormVisible6: false,
       testingFeeList: [{
         "testing_project": "",
         "testing_fee": null
@@ -300,6 +450,7 @@ export default {
         page: 1,
         limit: 20
       }
+      this.inquiry_detail_quotation_ids=[];
       this.date = null;
       this.getList()
     },
@@ -431,6 +582,41 @@ export default {
         })
       })
     },
+    handleSelectionChange(selection, row) {
+      let tem = selection;
+      let spanArr = this.inquiry_detail_quotation_ids;
+      if(selection.indexOf(row)>-1){
+        tem.forEach((item, index) => {
+          spanArr.push(item.inquiry_quotation_id);
+        });
+      }else{
+        let newSet = new Set(spanArr)
+        newSet.delete(row.inquiry_quotation_id)
+        spanArr = [...newSet]
+      }
+      this.inquiry_detail_quotation_ids = Array.from(new Set(spanArr));
+    },
+    handleSendQuotation() {
+      const that = this
+      if (that.inquiry_detail_quotation_ids.length < 1) {
+        that.$message.error('请勾选报价明细！');
+        return
+      }
+      let tem ={
+        inquiry_quotation_ids:that.inquiry_detail_quotation_ids
+      }
+      // console.log(tem)
+      console.log(that.inquiry_detail_quotation_ids)
+      sendQuotation2(tem).then(response => {
+        if(response.code == 0){
+        this.inquiry_detail_quotation_ids=[];
+          that.$message({
+            message: '发送成功！',
+            type: 'success'
+          });
+        }
+      })
+    },
     removeItem(item) {
       var index = this.testingFeeList.indexOf(item)
       if (index !== -1) {
@@ -454,7 +640,35 @@ export default {
         appraisal_project: '',
         appraisal_fee: ''
       });
-    }
+    },
+    handleUpdate3(row) {
+      this.temp = Object.assign({}, row)
+      this.$nextTick(() => {
+        let tem = {
+          limit: 1000
+        }
+        fetchHRList(tem).then(response => {
+          this.dialogFormVisible6 = true
+          this.employeeList = response.data.page_datas
+          this.listLoading = false
+        })
+      })
+    },
+    updateDistributeEmployee() {
+      let tem = {
+        employee_id: this.employeeId
+      }
+      updateDistributeEemployee(this.temp.id, tem).then(() => {
+        this.$notify({
+          title: 'Success',
+          message: '修改成功！',
+          type: 'success',
+          duration: 2000
+        })
+        this.getList()
+        this.dialogFormVisible6 = false
+      })
+    },
   }
 }
 

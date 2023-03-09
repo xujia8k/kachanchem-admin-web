@@ -173,7 +173,7 @@
                 <span v-else>{{ scope.row.price }}</span>
               </template>
             </el-table-column>
-            <el-table-column align="center" label="货币类型" width="125px">
+            <!-- <el-table-column align="center" label="货币类型" width="125px">
               <template slot-scope="scope">
                 <template v-if="scope.row.edit">
                   <el-select v-model="scope.row.currency_type" placeholder="币种" style="width: 100%;">
@@ -182,7 +182,7 @@
                 </template>
                 <span v-else>{{ scope.row.currency_type }}</span>
               </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column align="center" label="数量" width="125px">
               <template slot-scope="scope">
                 <template v-if="scope.row.edit">
@@ -617,14 +617,6 @@ export default {
           this.$notify({
             title: '提示信息',
             message: '请输入价格！',
-            type: 'error',
-            duration: 3000
-          })
-          return
-        } else if (!row.row.currency_type) {
-          this.$notify({
-            title: '提示信息',
-            message: '请输入货币类型！',
             type: 'error',
             duration: 3000
           })

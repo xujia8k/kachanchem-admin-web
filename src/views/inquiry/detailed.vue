@@ -39,13 +39,19 @@
                   <el-input :disabled="true" v-model="list.phone" />
                 </el-form-item>
               </el-col>
+              <el-col :span="6" :xs="24">
+                <el-form-item label="备注">
+                  <el-input :disabled="true" v-model="list.note" />
+                </el-form-item>
+              </el-col>
             </el-row>
           </el-form>
           <div class="ovh">
             <div class="ovh fr">
               <template>
-                <el-button type="warning" @click="handleCreateSalesOrder()" v-preventReClick v-if="list.status == 1">生成销售订单</el-button>
+                <el-button type="warning" @click="handleCreateSalesOrder()" v-preventReClick v-if="list.status == 1">生成订单预览</el-button>
                 <el-button type="success" @click="handleSendQuotation()" v-preventReClick v-if="list.status == 0">发送报价</el-button>
+                <el-button type="success" @click="handleRelateCustomer()" v-preventReClick v-if="userName == '管理员' || userName == 'admin'">关联客户</el-button>
               </template>
             </div>
           </div>
@@ -116,7 +122,7 @@
                     <el-form-item label="报关费">
                       <span>{{ props.row.declare_fee }}</span>
                     </el-form-item>
-                   <!--  <el-form-item label="鉴定项目">
+                    <!--  <el-form-item label="鉴定项目">
                       <span>{{ props.row.appraisal_project }}</span>
                     </el-form-item> -->
                     <el-form-item label="鉴定费">
@@ -166,7 +172,8 @@
                 </template>
               </el-table-column>
               <el-table-column align="center" label="价格">
-                <template slot-scope="scope">
+                <template slot-scope="scope" v-if="scope.row.price == 0">/</template>
+                <template slot-scope="scope" v-else>
                   {{ scope.row.price }}
                 </template>
               </el-table-column>
@@ -209,8 +216,9 @@
               </template>
             </el-table-column>
             <el-table-column label="总价" align="center">
-              <template slot-scope="scope">
-                <span>{{ scope.row.price }}</span>
+              <template slot-scope="scope" v-if="scope.row.price == 0">/</template>
+              <template slot-scope="scope" v-else>
+                {{ scope.row.price }}
               </template>
             </el-table-column>
             <!-- <el-table-column label="货币类型" align="center">
@@ -264,10 +272,10 @@
               </template>
             </el-table-column>
             <el-table-column label="报关费" align="center">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.declare_fee }}</span>
-                </template>
-              </el-table-column>
+              <template slot-scope="scope">
+                <span>{{ scope.row.declare_fee }}</span>
+              </template>
+            </el-table-column>
             <el-table-column label="货期" align="center">
               <template slot-scope="scope">
                 <span>{{ scope.row.stock }}</span>
@@ -424,7 +432,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="鉴定项目">
-                  <el-select v-model="quotation.appraisal_project" placeholder="请选择鉴定项目" style="width: 100%;"  @change="appraisal_projectChange">
+                  <el-select v-model="quotation.appraisal_project" placeholder="请选择鉴定项目" style="width: 100%;" @change="appraisal_projectChange">
                     <el-option v-for="(item, index) in appraisalFeeList" :key="index" :label="item.appraisal_project" :value="item.appraisal_fee" />
                   </el-select>
                 </el-form-item>
@@ -436,7 +444,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="是否危险品" prop="is_dangerous">
-                  <el-radio-group v-model="quotation.is_dangerous" >
+                  <el-radio-group v-model="quotation.is_dangerous">
                     <el-radio :label="0">
                       否
                     </el-radio>
@@ -460,7 +468,7 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="是否报关" prop="is_declare">
-                  <el-radio-group v-model="quotation.is_declare"  @change="changeDeclare">
+                  <el-radio-group v-model="quotation.is_declare" @change="changeDeclare">
                     <el-radio :label="0">
                       否
                     </el-radio>
@@ -567,7 +575,144 @@
           </el-tabs>
         </el-drawer>
         <!-- 订单生成 -->
-        <el-dialog title="生成销售订单" :visible.sync="dialogFormVisible2" width="60%" :close-on-click-modal="false" @close="handleClose">
+        <el-dialog title="生成销售订单" :visible.sync="dialogFormVisible2" width="90%" :close-on-click-modal="false" @close="handleClose">
+          <p style="color:red">注：请检查订单信息，点击确定按钮将生成销售订单</p>
+          <div class="card">
+            <el-row :gutter="20">
+              <el-col :span="10" :xs="24">
+                <div class="item"><label class="name">询问产品名:</label>{{ list.product_name }}</div>
+              </el-col>
+              <el-col :span="4" :xs="24">
+                <div class="item"><label class="name">询问CAS号:</label>{{ list.cas }}</div>
+              </el-col>
+              <el-col :span="4" :xs="24">
+                <div class="item"><label class="name">CAS号:</label>{{ list.cas }}</div>
+              </el-col>
+              <el-col :span="3" :xs="24">
+                <div class="item"><label class="name">纯度:</label>{{ list.purity }}</div>
+              </el-col>
+              <el-col :span="3" :xs="24">
+                <div class="item"><label class="name">数量:</label>{{ list.package_str }}</div>
+              </el-col>
+              <el-col :span="10" :xs="24">
+                <div class="item"><label class="name">备注:</label>{{ list.note }}</div>
+              </el-col>
+            </el-row>
+            <!-- 报价信息 -->
+            <el-table :data="selectRFQ" type="index" style="width: 100%;margin-top: 10px" border>
+              <el-table-column type="expand">
+                <template slot-scope="props">
+                  <el-form label-position="right" inline class="demo-table-expand">
+                    <el-form-item label="产品性状">
+                      <span>{{ props.row.appear_shape }}</span>
+                    </el-form-item>
+                    <el-form-item label="汇率">
+                      <span>{{ props.row.exchange_rate }}</span>
+                    </el-form-item>
+                    <el-form-item label="采购报价/汇率">
+                      <span>{{ props.row.cost_price }}</span>
+                    </el-form-item>
+                    <el-form-item label="采购报价">
+                      <span>{{ props.row.cost_price_usd }}</span>
+                    </el-form-item>
+                    <el-form-item label="利润">
+                      <span>{{ props.row.profit }}</span>
+                    </el-form-item>
+                    <el-form-item label="运费">
+                      <span>{{ props.row.shipping_fee }}</span>
+                    </el-form-item>
+                    <el-form-item label="操作费">
+                      <span>{{ props.row.operating_fee }}</span>
+                    </el-form-item>
+                    <!-- <el-form-item label="检测项目">
+                      <span>{{ props.row.testing_project }}</span>
+                    </el-form-item> -->
+                    <el-form-item label="检测费">
+                      <span>{{ props.row.testing_fee }}</span>
+                    </el-form-item>
+                    <el-form-item label="是否报关">
+                      <span>{{ props.row.is_declare | statusFilter}}</span>
+                    </el-form-item>
+                    <el-form-item label="报关费">
+                      <span>{{ props.row.declare_fee }}</span>
+                    </el-form-item>
+                    <!--  <el-form-item label="鉴定项目">
+                      <span>{{ props.row.appraisal_project }}</span>
+                    </el-form-item> -->
+                    <el-form-item label="鉴定费">
+                      <span>{{ props.row.appraisal_fee }}</span>
+                    </el-form-item>
+                    <el-form-item label="银行手续费">
+                      <span>{{ props.row.bank_fee }}</span>
+                    </el-form-item>
+                    <el-form-item label="是否危险品">
+                      <span>{{ props.row.is_dangerous | statusFilter}}</span>
+                    </el-form-item>
+                    <el-form-item label="存储条件">
+                      <span>{{ props.row.storage }}</span>
+                    </el-form-item>
+                    <el-form-item label="监管条件">
+                      <span>{{ props.row.is_take_charge | isTtakeChargeFilter}}</span>
+                    </el-form-item>
+                    <el-form-item label="HS编码">
+                      <span>{{ props.row.hs_code }}</span>
+                    </el-form-item>
+                    <el-form-item label="原产国">
+                      <span>{{ props.row.country }}</span>
+                    </el-form-item>
+                    <el-form-item label="是否定制">
+                      <span>{{ props.row.is_customized | isCustomizedFilter}}</span>
+                    </el-form-item>
+                    <el-form-item label="货期">
+                      <span>{{ props.row.stock }}</span>
+                    </el-form-item>
+                    <el-form-item label="报价术语">
+                      <span>{{ props.row.incoterms }}</span>
+                    </el-form-item>
+                    <el-form-item label="采购备注">
+                      <span>{{ props.row.purchase_note }}</span>
+                    </el-form-item>
+                  </el-form>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" label="供应商">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.vendor_company_name }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" label="报价时间">
+                <template slot-scope="scope">
+                  <span>{{ scope.row.created_at }}</span>
+                </template>
+              </el-table-column>
+              <el-table-column align="center" label="价格">
+                <template slot-scope="scope" v-if="scope.row.price == 0">/</template>
+                <template slot-scope="scope" v-else>
+                  {{ scope.row.price }}
+                </template>
+              </el-table-column>
+              <el-table-column align="center" label="采购报价">
+                <template slot-scope="scope">
+                  {{ scope.row.cost_price }}
+                </template>
+              </el-table-column>
+              <el-table-column align="center" label="规格">
+                <template slot-scope="scope">
+                  {{ scope.row.package }}
+                </template>
+              </el-table-column>
+              <el-table-column align="center" label="纯度">
+                <template slot-scope="scope">
+                  {{ scope.row.purity }}
+                </template>
+              </el-table-column>
+              <el-table-column align="center" label="备注">
+                <template slot-scope="scope">
+                  {{ scope.row.note }}
+                </template>
+              </el-table-column>
+            </el-table>
+          </div>
           <el-form :model="temp1" label-position="right" label-width="110px">
             <el-row :gutter="20">
               <el-col :xs="24" :span="12">
@@ -614,15 +759,37 @@
         </el-dialog>
       </el-card>
     </el-row>
+    
+    <el-dialog title="分配询盘订单负责人" :visible.sync="dialogFormVisible4" :close-on-click-modal="false" width="30%">
+      <el-select v-model="customer_id" filterable placeholder="请选择客户">
+    <el-option
+      v-for="item in customerList"
+      :key="item.id"
+      :label="item.company_name"
+      :value="item.id">
+    </el-option>
+  </el-select>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible4 = false">
+          关闭
+        </el-button>
+        <el-button type="primary" @click="updateRelateCustomer()">
+          确认
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
 import { mapState } from 'vuex';
-import { inquiriesDetails, quotationsDetails, addQuotation, updateInquiriesQuotation, createCustomerOrder, cancelOrder, quotationHistories, testingFee, appraisalFee, exchangeRate, sendQuotation } from '@/api/inquiry'
+import { inquiriesDetails, quotationsDetails, addQuotation, updateInquiriesQuotation, createCustomerOrder, cancelOrder, quotationHistories, testingFee, appraisalFee, exchangeRate, sendQuotation, updateRelateCustomer } from '@/api/inquiry'
 import companies from '@/components/Autocomplete/companies'
 import contacts from '@/components/Autocomplete/contacts'
 import Pagination from '@/components/Pagination'
 import { isInArray, parseTime } from '@/utils'
+import { fetchCustomers } from '@/api/commons'
+import { getName, getToken } from '@/utils/auth'
+import { getCustomers } from '@/api/crm'
 
 export default {
   name: 'Profile',
@@ -647,7 +814,8 @@ export default {
       quotationDetailsInfo: null, //报价详情信息
       inquiry_detail_quotation_ids: [], //选中报价详情
       tem_quotation_ids: [], //临时数组存放报价详情
-      companiesStatus: true, //是否可以修改供应商id
+      companiesStatus: true, //是否可以修改供应商id 
+      userName: getName(), //当前登录用户名字
       company_currency_type: [{
         "id": 1,
         "name": 'CNY'
@@ -875,7 +1043,9 @@ export default {
       dialogFormVisible: false,
       dialogFormVisible2: false,
       dialogFormVisible3: false,
+      dialogFormVisible4: false,
       downloadLoading: false,
+      selectRFQ: [],
       testingFeeList: [],
       appraisalFeeList: [],
       exchangeRateList: '',
@@ -913,7 +1083,9 @@ export default {
         "is_customized": 0,
         "stock": null
       },
-      drawer: false
+      drawer: false,
+      customer_id: null,
+      customerList: []
     }
   },
   watch: {
@@ -956,10 +1128,12 @@ export default {
       })
     },
     resetTemp() {
+      this.customer_id = null;
       this.listQuery = {
         page: 1,
         limit: 20
       }
+      this.selectRFQ = [];
       this.temp = {
         leader_id: '',
         name: ''
@@ -1052,9 +1226,9 @@ export default {
       this.quotation.testing_fee = parseFloat(this.quotation.testing_fee)
       this.quotation.appraisal_fee = parseFloat(this.quotation.appraisal_fee)
       // 是否报关，1-是，0-否
-      if (this.quotation.is_declare==1) {
+      if (this.quotation.is_declare == 1) {
         this.quotation.declare_fee = 30
-      }else {
+      } else {
         this.quotation.declare_fee = 0
       }
       testingFee().then(response => {
@@ -1138,6 +1312,14 @@ export default {
         page: 1,
         limit: 100
       }
+      let list = that.list.inquiry_quotations;
+      for (var y = 0; y < that.inquiry_detail_quotation_ids.length; y++) {
+        for (var i = 0; i < list.length; i++) {
+          if (list[i].inquiry_quotation_id == that.inquiry_detail_quotation_ids[y]) {
+            that.selectRFQ.push(list[i])
+          }
+        }
+      }
       tem.id = that.list.company_id;
     },
     //生成销售订单
@@ -1161,41 +1343,71 @@ export default {
         this.$router.push({ path: '/customer_order/customer_orders', query: {} });
       })
     },
-    testing_projectChange(val){
+    testing_projectChange(val) {
       if (val) {
         this.quotation.testing_fee = val
       }
     },
-    appraisal_projectChange(val){
+    appraisal_projectChange(val) {
       if (val) {
         console.log(val)
         this.quotation.appraisal_fee = val
       }
     },
-    changeDeclare(val){
-      if (val==1) {
+    changeDeclare(val) {
+      if (val == 1) {
         console.log(val)
         this.quotation.declare_fee = 30
-      }else {
+      } else {
         console.log(val)
         this.quotation.declare_fee = 0
       }
     },
-    handleSendQuotation(){
+    handleSendQuotation() {
       const that = this
       if (that.inquiry_detail_quotation_ids.length < 1) {
         that.$message.error('请勾选报价明细！');
         return
       }
-      let tem ={
-        inquiry_quotation_ids:that.inquiry_detail_quotation_ids
+      let tem = {
+        inquiry_quotation_ids: that.inquiry_detail_quotation_ids
       }
       // console.log(tem)
       // console.log(that.inquiry_detail_quotation_ids)
       sendQuotation(tem).then(response => {
-        if(response.code == 0){
+        if (response.code == 0) {
           that.$message({
             message: '发送成功！',
+            type: 'success'
+          });
+        }
+      })
+    },
+    //显示关联客户
+    handleRelateCustomer(row) {
+      const that = this
+      that.quotation = Object.assign({}, row)
+      let tem={
+        limit:1000
+      }
+      getCustomers(tem).then(response => {
+        if (response.code == 0) {
+          that.customerList=response.data.page_datas
+          that.dialogFormVisible4 = true
+        }
+      })
+
+    },
+    updateRelateCustomer() {
+      const that = this
+      let tem = {
+        customer_id: that.customer_id
+      }
+      updateRelateCustomer(that.list.id, tem).then(response => {
+        if (response.code == 0) {
+          that.dialogFormVisible4 = false
+          that.$message({
+            message: '关联成功！',
             type: 'success'
           });
         }

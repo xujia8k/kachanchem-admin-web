@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model.trim="listQuery.name" placeholder="名字" style="width: 200px;" class="filter-item" @keyup.enter.native="getList"/>
-      <el-input v-model.trim="listQuery.username" placeholder="账号" style="width: 200px;margin-left: 10px;" class="filter-item" @keyup.enter.native="getList"/>
+      <el-input v-model.trim="listQuery.name" placeholder="名字" style="width: 200px;" class="filter-item" @keyup.enter.native="getList" />
+      <el-input v-model.trim="listQuery.username" placeholder="账号" style="width: 200px;margin-left: 10px;" class="filter-item" @keyup.enter.native="getList" />
       <el-button class="filter-item ml10" type="primary" icon="el-icon-search" @click="getList">
         搜索
       </el-button>
@@ -31,9 +31,19 @@
           <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="岗位" align="center">
+      <!-- <el-table-column label="岗位" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.position_id | positionFilter }}</span>
+        </template>
+      </el-table-column> -->
+      <el-table-column label="email" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.email }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="生日" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.birthday | parseTime('{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="加入时间" align="center">
@@ -99,6 +109,11 @@
           <el-col :span="12">
             <el-form-item label="公司电话" prop="office_tel">
               <el-input v-model="temp.office_tel" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="email" prop="email">
+              <el-input v-model="temp.email" placeholder="请输入email！" />
             </el-form-item>
           </el-col>
           <el-col :span="12">

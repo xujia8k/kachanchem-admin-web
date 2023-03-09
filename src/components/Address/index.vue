@@ -57,7 +57,7 @@
       </el-table-column>
     </el-table>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" :close-on-click-modal="false" width="60%" :append-to-body="true">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" :close-on-click-modal="false" width="90%" :append-to-body="true">
       <el-form ref="rules" :rules="rules" :model="temp" label-position="right" label-width="110px">
         <el-row :gutter="20">
           <el-col :span="6">
@@ -70,9 +70,29 @@
               <el-input v-model="temp.mobile" />
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+          <!-- <el-col :span="6">
             <el-form-item label="省市区" prop="PCD">
               <el-cascader v-model="temp.province_city_district" :props="props" @change="handleChange" />
+            </el-form-item>
+          </el-col> -->
+          <el-col :span="6">
+            <el-form-item label="省份" prop="province">
+              <el-input v-model="temp.province" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="城市" prop="city">
+              <el-input v-model="temp.city" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="地区" prop="district">
+              <el-input v-model="temp.district" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="地址详细" prop="address">
+              <el-input v-model="temp.address" type="textarea" show-word-limit />
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -85,26 +105,6 @@
                   是
                 </el-radio>
               </el-radio-group>
-            </el-form-item>
-          </el-col>
-          <!-- <el-col :span="12">
-            <el-form-item label="省份" prop="province">
-              <el-input v-model="temp.province" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="城市" prop="city">
-              <el-input v-model="temp.city" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="地区" prop="district">
-              <el-input v-model="temp.district" />
-            </el-form-item>
-          </el-col> -->
-          <el-col :span="12">
-            <el-form-item label="地址详细" prop="address">
-              <el-input v-model="temp.address" type="textarea" show-word-limit />
             </el-form-item>
           </el-col>
         </el-row>
@@ -203,9 +203,9 @@ export default {
       }
     },
     handleUpdate(row) {
-      this.companyId = row.id
+      this.companyId = this.id
       row.address_id = row.id
-      row.province_city_district = [row.province, row.city, row.district]
+      // row.province_city_district = [row.province, row.city, row.district]
       this.temp = Object.assign({}, row)
       this.dialogStatus = 'update'
       this.address = [row.province, row.city, row.district]
@@ -227,9 +227,9 @@ export default {
       that.$refs['rules'].validate((valid) => {
         if (valid) {
           that.temp.id = that.id
-          that.temp.province = that.address[0]
-          that.temp.city = that.address[1]
-          that.temp.district = that.address[2]
+          // that.temp.province = that.address[0]
+          // that.temp.city = that.address[1]
+          // that.temp.district = that.address[2]
           createAddress(that.temp).then(() => {
             that.getList()
             that.dialogFormVisible = false
@@ -247,10 +247,11 @@ export default {
       const that = this
       that.$refs['rules'].validate((valid) => {
         if (valid) {
-          that.temp.province = that.address[0]
-          that.temp.city = that.address[1]
-          that.temp.district = that.address[2]
+          // that.temp.province = that.address[0]
+          // that.temp.city = that.address[1]
+          // that.temp.district = that.address[2]
           const tempData = Object.assign({}, that.temp)
+          console.log(tempData)
           updateAddress(that.id, tempData).then(() => {
             for (const v of that.list) {
               if (v.id === that.temp.id) {

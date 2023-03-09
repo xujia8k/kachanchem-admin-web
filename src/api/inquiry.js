@@ -107,10 +107,19 @@ export function quotationHistories(query) {
     params: query
   })
 }
-// 发送报价
+// 详情页发送报价
 export function sendQuotation(query) {
   return request({
     url: '/inquiry/inquiry_quotations/send_quotation',
+    method: 'PUT',
+    data: query
+  })
+}
+
+// 列表页发送报价
+export function sendQuotation2(query) {
+  return request({
+    url: '/inquiry/inquiries/send_quotation',
     method: 'PUT',
     data: query
   })
@@ -161,6 +170,24 @@ export function exchangeRate(query) {
 export function updateExchangeRate(query) {
   return request({
     url: '/inquiry/inquiries/update_exchange_rate',
+    method: 'PUT',
+    data: query
+  })
+}
+
+//分配负责人
+export function updateDistributeEemployee(id,query) {
+  return request({
+    url: '/inquiry/inquiries/' + id + '/distribute_employee',
+    method: 'PUT',
+    data: query
+  })
+}
+
+//关联客户
+export function updateRelateCustomer(id,query) {
+  return request({
+    url: '/inquiry/inquiries/' + id + '/relate_customer',
     method: 'PUT',
     data: query
   })

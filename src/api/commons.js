@@ -41,3 +41,11 @@ export function fetchDistricts(query) {
   })
 }
 
+// 客户信息搜索
+export function fetchCustomers(query) {
+  return request({
+    url: '/searchs/customers',
+    method: 'get',
+    params: query
+  })
+}
