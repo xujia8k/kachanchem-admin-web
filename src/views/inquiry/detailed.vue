@@ -51,7 +51,7 @@
               <template>
                 <el-button type="warning" @click="handleCreateSalesOrder()" v-preventReClick v-if="list.status == 1">生成订单预览</el-button>
                 <el-button type="success" @click="handleSendQuotation()" v-preventReClick v-if="list.status == 0">发送报价</el-button>
-                <el-button type="success" @click="handleRelateCustomer()" v-preventReClick v-if="userName == '管理员' || userName == 'admin'">关联客户</el-button>
+                <el-button type="success" @click="handleRelateCustomer()" v-preventReClick v-if="!list.customer_id">关联客户</el-button>
               </template>
             </div>
           </div>
@@ -172,9 +172,9 @@
                 </template>
               </el-table-column>
               <el-table-column align="center" label="价格">
-                <template slot-scope="scope" v-if="scope.row.price == 0">/</template>
-                <template slot-scope="scope" v-else>
-                  {{ scope.row.price }}
+                <template slot-scope="scope" >
+                  <span v-if="scope.row.price == 0">/</span>
+                  <span v-else>{{ scope.row.price }}</span>
                 </template>
               </el-table-column>
               <el-table-column align="center" label="采购报价">
@@ -281,72 +281,6 @@
                 <span>{{ scope.row.stock }}</span>
               </template>
             </el-table-column>
-            <!--  
-            <el-table-column label="检测项目" align="center">
-              <template slot-scope="scope">
-                <span>{{ scope.row.testing_project }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="产品性状" align="center">
-              <template slot-scope="scope">
-                <span>{{ scope.row.appear_shape }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="报价贸易术语" align="center">
-              <template slot-scope="scope">
-                <span>{{ scope.row.incoterms }}</span>
-              </template>
-            </el-table-column>
-            <el-table-column label="是否报关" align="center">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.is_declare | statusFilter}}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="报关费" align="center">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.declare_fee }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="鉴定项目" align="center">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.appraisal_project }}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="是否危险品" align="center">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.is_dangerous | statusFilter}}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="存储条件" align="center">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.storage}}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="监管条件" align="center">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.is_take_charge | isTtakeChargeFilter}}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="HS编码" align="center">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.hs_code}}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="原产国" align="center">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.country}}</span>
-                </template>
-              </el-table-column>
-              <el-table-column label="是否定制" align="center">
-                <template slot-scope="scope">
-                  <span>{{ scope.row.is_customized | isCustomizedFilter}}</span>
-                </template>
-              </el-table-column>
-            <el-table-column label="备注" align="center">
-              <template slot-scope="scope">
-                <span>{{ scope.row.note }}</span>
-              </template>
-            </el-table-column> -->
             <el-table-column label="操作" align="center" width="160" class-name="small-padding fixed-width">
               <template slot-scope="{row}">
                 <el-button type="primary" size="small" @click="handleUpdateQuotation(row)">
@@ -731,13 +665,19 @@
               </el-col>
               <el-col :xs="24" :span="12">
                 <el-form-item label="发票寄送地址" prop="invoice_address">
-                  <el-input type="textarea" :rows="2" placeholder="请输入收票地址信息" v-model="temp1.invoice_address">
+                  <el-select v-model="temp1.invoice_address" filterable placeholder="请选择收票地址" v-if="invoicesList.length>0">
+                    <el-option v-for="item in invoicesList" :key="item.id" :label="item.company_name" :value="item.id" />
+                  </el-select>
+                  <el-input type="textarea" :rows="2" placeholder="请输入收票地址信息" v-model="temp1.invoice_address" v-else>
                   </el-input>
                 </el-form-item>
               </el-col>
-              <el-col :xs="24" :span="12" v-if="address==1">
+              <el-col :xs="24" :span="12">
                 <el-form-item label="收货地址" prop="ship_address">
-                  <el-input type="textarea" :rows="2" placeholder="请输入收货地址" v-model="temp1.ship_address">
+                   <el-select v-model="temp1.ship_address" placeholder="收货地址" style="width: 100%;" v-if="addressList.length>0">
+                <el-option v-for="item in addressList" :key="item.value" :label="item.label" :value="item.value" />
+              </el-select>
+                  <el-input type="textarea" :rows="2" placeholder="请输入收货地址" v-model="temp1.ship_address" v-else>
                   </el-input>
                 </el-form-item>
               </el-col>
@@ -759,16 +699,11 @@
         </el-dialog>
       </el-card>
     </el-row>
-    
     <el-dialog title="分配询盘订单负责人" :visible.sync="dialogFormVisible4" :close-on-click-modal="false" width="30%">
       <el-select v-model="customer_id" filterable placeholder="请选择客户">
-    <el-option
-      v-for="item in customerList"
-      :key="item.id"
-      :label="item.company_name"
-      :value="item.id">
-    </el-option>
-  </el-select>
+        <el-option v-for="item in customerList" :key="item.id" :label="item.company_name" :value="item.id">
+        </el-option>
+      </el-select>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible4 = false">
           关闭
@@ -790,6 +725,7 @@ import { isInArray, parseTime } from '@/utils'
 import { fetchCustomers } from '@/api/commons'
 import { getName, getToken } from '@/utils/auth'
 import { getCustomers } from '@/api/crm'
+import { fetchAddressesList, fetchInvoicesList } from '@/api/crm'
 
 export default {
   name: 'Profile',
@@ -1085,7 +1021,9 @@ export default {
       },
       drawer: false,
       customer_id: null,
-      customerList: []
+      customerList: [],
+      addressList: [],
+      invoicesList: []
     }
   },
   watch: {
@@ -1133,6 +1071,8 @@ export default {
         page: 1,
         limit: 20
       }
+      this.addressList = [];
+      this.invoicesList = [];
       this.selectRFQ = [];
       this.temp = {
         leader_id: '',
@@ -1307,11 +1247,41 @@ export default {
         that.$message.error('请勾选报价明细！');
         return
       }
-      that.dialogFormVisible2 = true
       let tem = {
-        page: 1,
+        id: this.list.customer_id,
         limit: 100
       }
+      fetchAddressesList(tem).then(response => {
+        if (response.code == 0) {
+          let data = response.data.page_datas;
+          //选中默认收货地址
+          data.forEach((item, index) => {
+            // if (item.is_default == 1) {
+            //   that.temp1.address_id = item.id;
+            // }
+            item.label = item.province + item.city + item.district + item.address
+            item.value = item.id
+          })
+          that.addressList = data;
+        }
+      })
+      fetchInvoicesList(tem).then(response => {
+        if (response.code == 0) {
+          let data = response.data.page_datas;
+          let tem = [];
+          that.temInvoicesList = data
+          //默认选中开票类型为1
+          data.forEach((item, index) => {
+            if (item.category == 1) {
+              tem.push(item)
+            }
+          })
+          that.invoicesList = tem;
+          tem.length > 0 ? that.temp1.invoice_id = tem[0].id : '';
+          tem.length > 0 ? that.temp1.invoice_name = tem[0].company_name : '';
+        }
+      })
+      that.dialogFormVisible2 = true
       let list = that.list.inquiry_quotations;
       for (var y = 0; y < that.inquiry_detail_quotation_ids.length; y++) {
         for (var i = 0; i < list.length; i++) {
@@ -1387,12 +1357,12 @@ export default {
     handleRelateCustomer(row) {
       const that = this
       that.quotation = Object.assign({}, row)
-      let tem={
-        limit:1000
+      let tem = {
+        limit: 1000
       }
       getCustomers(tem).then(response => {
         if (response.code == 0) {
-          that.customerList=response.data.page_datas
+          that.customerList = response.data.page_datas
           that.dialogFormVisible4 = true
         }
       })
@@ -1406,6 +1376,7 @@ export default {
       updateRelateCustomer(that.list.id, tem).then(response => {
         if (response.code == 0) {
           that.dialogFormVisible4 = false
+          that.getList()
           that.$message({
             message: '关联成功！',
             type: 'success'

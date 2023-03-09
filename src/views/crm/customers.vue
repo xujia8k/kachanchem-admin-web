@@ -6,7 +6,7 @@
       <el-input v-model.trim="listQuery.company_name" placeholder="公司名称" style="width: 150px;" class="filter-item" @keyup.enter.native="getList" />
       <el-input v-model.trim="listQuery.phone" placeholder="手机号" style="width: 150px;" class="filter-item" @keyup.enter.native="getList" />
       <el-input v-model.trim="listQuery.email" placeholder="email" style="width: 150px;" class="filter-item" @keyup.enter.native="getList" />
-      <el-input v-model.trim="listQuery.country" placeholder="country" style="width: 150px;" class="filter-item" @keyup.enter.native="getList" />
+      <el-input v-model.trim="listQuery.country" placeholder="国籍" style="width: 150px;" class="filter-item" @keyup.enter.native="getList" />
       <el-button class="filter-item ml40" type="primary" icon="el-icon-search" @click="getList">
         搜索
       </el-button>

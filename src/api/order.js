@@ -10,7 +10,7 @@ export function fetchList(query) {
 export function updateReceivedAmount(query) {
   return request({
     url: '/customer_order/customer_orders/' + query.id +'/received_amount',
-    method: 'get',
-    params: query
+    method: 'put',
+    data: query
   })
 }

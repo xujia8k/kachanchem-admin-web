@@ -22,8 +22,8 @@
             <el-form-item label="产品名称">
               <span>{{ props.row.product_name }}</span>
             </el-form-item>
-            <el-form-item label="产品cas号">
-              <span>{{ props.row.cas }}</span>
+            <el-form-item label="Catalog No.">
+              <span>{{ props.row.product_id }}</span>
             </el-form-item>
             <el-form-item label="包装">
               <span>{{ props.row.package }}</span>
@@ -35,7 +35,7 @@
               <span>{{ props.row.order_no }}</span>
             </el-form-item>
             <el-form-item label="发票类型">
-              <span>{{ props.row.invoice_type  | invoiceTypeFilter}}</span>
+              <span>{{ props.row.invoice_type | invoiceTypeFilter}}</span>
             </el-form-item>
             <el-form-item label="收票地址">
               <span>{{ props.row.order_no }}</span>
@@ -57,16 +57,24 @@
           <span class="c-red" v-if="scope.row.order_status == 5">{{ scope.row.order_status | customerOrderStatusFilter }}</span>
         </template>
       </el-table-column>
-       <el-table-column label="支付状态" align="center">
-        <template slot-scope="scope">
-           <span class="c-red" v-if="scope.row.payment_status == 0">{{ scope.row.payment_status | paymentStatusFilter }}</span>
-          <span class="c-green" v-if="scope.row.payment_status == 1">{{ scope.row.payment_status | paymentStatusFilter }}</span>
-          <span class="c-dark-blue" v-if="scope.row.payment_status == 2">{{ scope.row.payment_status | paymentStatusFilter }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="订单编号" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.order_no }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="CAS" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.cas }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="数量" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.package }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="贸易术语" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.incoterms }}</span>
         </template>
       </el-table-column>
       <el-table-column label="订单总额" align="center">
@@ -79,6 +87,13 @@
           <span>{{ scope.row.currency_type | currencyFilter }}</span>
         </template>
       </el-table-column>
+     <!--  <el-table-column label="支付状态" align="center">
+        <template slot-scope="scope">
+          <span class="c-red" v-if="scope.row.payment_status == 0">{{ scope.row.payment_status | paymentStatusFilter }}</span>
+          <span class="c-green" v-if="scope.row.payment_status == 1">{{ scope.row.payment_status | paymentStatusFilter }}</span>
+          <span class="c-dark-blue" v-if="scope.row.payment_status == 2">{{ scope.row.payment_status | paymentStatusFilter }}</span>
+        </template>
+      </el-table-column> -->
       <el-table-column label="实际收款金额" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.received_amount }}</span>
@@ -104,7 +119,7 @@
       </el-table-column>
     </el-table>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getList" />
-      <el-dialog title="录入收款信息" :visible.sync="dialogFormVisible">
+    <el-dialog title="录入收款信息" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :model="temp" label-position="left" label-width="100px" style="width: 400px; margin-left:40px;">
         <el-form-item label="收款金额" prop="received_amount">
           <el-input v-model="temp.received_amount" placeholder="请输入收款金额！" />
@@ -122,7 +137,7 @@
   </div>
 </template>
 <script>
-import { fetchList,updateReceivedAmount } from '@/api/order'
+import { fetchList, updateReceivedAmount } from '@/api/order'
 import Pagination from '@/components/Pagination'
 
 export default {
@@ -196,7 +211,7 @@ export default {
         limit: 20
       }
       this.temp = {
-        received_amount:0
+        received_amount: 0
       }
     },
     refresh() {
@@ -212,12 +227,21 @@ export default {
       })
     },
     updateReceived() {
-      let tem ={
-        id:this.temp.id,
-        received_amount:this.temp.received_amount,
+      let tem = {
+        id: this.temp.id,
+        received_amount: this.temp.received_amount,
       }
       updateReceivedAmount(tem).then(response => {
-        this.refresh()
+        if (response.code == 0) {
+          this.$notify({
+            title: 'Success',
+            message: '收款成功！',
+            type: 'success',
+            duration: 2000
+          })
+          this.dialogFormVisible = false
+          this.refresh()
+        }
       })
     }
   }
@@ -225,16 +249,19 @@ export default {
 
 </script>
 <style>
-   .demo-table-expand {
-    font-size: 0;
-  }
-  .demo-table-expand label {
-    width: 90px;
-    color: #99a9bf;
-  }
-  .demo-table-expand .el-form-item {
-    margin-right: 0;
-    margin-bottom: 0;
-    width: 50%;
-  }
+.demo-table-expand {
+  font-size: 0;
+}
+
+.demo-table-expand label {
+  width: 90px;
+  color: #99a9bf;
+}
+
+.demo-table-expand .el-form-item {
+  margin-right: 0;
+  margin-bottom: 0;
+  width: 50%;
+}
+
 </style>

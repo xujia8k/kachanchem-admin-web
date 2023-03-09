@@ -107,10 +107,11 @@ export function quotationHistories(query) {
     params: query
   })
 }
+
 // 详情页发送报价
 export function sendQuotation(query) {
   return request({
-    url: '/inquiry/inquiry_quotations/send_quotation',
+    url: '/inquiry/inquiries/send_quotation',
     method: 'PUT',
     data: query
   })
