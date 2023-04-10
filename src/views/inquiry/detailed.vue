@@ -692,7 +692,7 @@
             <el-button @click="dialogFormVisible2 = false">
               取消
             </el-button>
-            <el-button type="primary" @click="createSalesOrder()">
+            <el-button type="primary" @click="createSalesOrder()" v-preventReClick>
               确认
             </el-button>
           </div>
@@ -1303,8 +1303,8 @@ export default {
       if (this.inquiry_detail_quotation_ids) {
         this.temp1.inquiry_quotation_ids = this.inquiry_detail_quotation_ids;
       }
+      this.dialogFormVisible2 = false
       createCustomerOrder(this.temp1).then(response => {
-        this.dialogFormVisible2 = false
         this.$message({
           message: '新增成功！',
           type: 'success'
