@@ -19,7 +19,7 @@
                   <el-input :disabled="true" v-model="list.inquiry_no" />
                 </el-form-item>
               </el-col>
-              <el-col :span="6" :xs="24">
+             <!--  <el-col :span="6" :xs="24">
                 <el-form-item label="公司名称">
                   <el-input :disabled="true" v-model="list.company_name" />
                 </el-form-item>
@@ -43,7 +43,7 @@
                 <el-form-item label="联系人手机号">
                   <el-input :disabled="true" v-model="list.phone" />
                 </el-form-item>
-              </el-col>
+              </el-col> -->
               <el-col :span="12" :xs="24">
                 <el-form-item label="备注">
                   <el-input :disabled="true" v-model="list.note" type="textarea" show-word-limit />
@@ -63,10 +63,7 @@
           <div class="card">
             <el-row :gutter="20">
               <el-col :span="10" :xs="24">
-                <div class="item"><label class="name">询问产品名:</label>{{ list.product_name }}</div>
-              </el-col>
-              <el-col :span="4" :xs="24">
-                <div class="item"><label class="name">询问CAS号:</label>{{ list.cas }}</div>
+                <div class="item"><label class="name">产品名:</label>{{ list.product_name }}</div>
               </el-col>
               <el-col :span="4" :xs="24">
                 <div class="item"><label class="name">CAS号:</label>{{ list.cas }}</div>

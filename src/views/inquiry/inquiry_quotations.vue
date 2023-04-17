@@ -36,7 +36,7 @@
         <template slot-scope="scope">
           <span>{{ scope.row.created_at }}</span>
         </template>
-      </el-table-column> -->
+      </el-table-column>
       <el-table-column label="公司名称" min-width="200px" align="center" :show-overflow-tooltip='true'>
         <template slot-scope="scope">
           <span>{{scope.row.company_name }}</span>
@@ -46,7 +46,7 @@
         <template slot-scope="scope">
           <span>{{ scope.row.first_name}}{{scope.row.last_name }}</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column label="询问产品名" min-width="200px" align="center" :show-overflow-tooltip='true'>
         <template slot-scope="scope">
           <span class="toe">{{ scope.row.product_name }}</span>
