@@ -278,7 +278,7 @@ export default {
       let tem = {
         'customer_id': that.contactsInfo ? that.contactsInfo.id : '',
         'product_id': that.inquiry_details[0].product_id,
-        'package': that.inquiry_details[0].package+that.inquiry_details[0].unit,
+        'package': that.inquiry_details[0].package + that.unitList[that.inquiry_details[0].unit-1].label,
         'purity': that.inquiry_details[0].purity,
         'note': that.note,
         'inquiry_details': that.inquiry_details
