@@ -112,6 +112,11 @@
                   {{ scope.row.purity }}
                 </template>
               </el-table-column>
+              <el-table-column align="center" label="货期">
+                <template slot-scope="scope">
+                  {{ scope.row.stock }}
+                </template>
+              </el-table-column>
               <el-table-column align="center" label="备注">
                 <template slot-scope="scope">
                   {{ scope.row.note }}
