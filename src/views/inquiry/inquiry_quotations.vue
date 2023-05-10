@@ -23,13 +23,13 @@
           <span>{{ scope.row.inquiry_no }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="报价状态" width="90px" align="center">
+      <el-table-column label="报价状态" width="100px" align="center">
         <template slot-scope="scope">
-          <!-- 0-未报价，1-已报价，2-已完成，3-已放弃 -->
           <span class="c-red" v-if="scope.row.status==0">{{ scope.row.status | priceStatusFilter }}</span>
           <span class="c-dark-blue" v-if="scope.row.status==1">{{ scope.row.status | priceStatusFilter }}</span>
           <span v-if="scope.row.status==2">{{ scope.row.status | priceStatusFilter }}</span>
           <span class="c-red" v-if="scope.row.status==3">{{ scope.row.status | priceStatusFilter }}</span>
+          <span class="c-blue" v-if="scope.row.status==4">{{ scope.row.status | priceStatusFilter }}</span>
         </template>
       </el-table-column>
       <!-- <el-table-column label="询价日期" width="95px" align="center">
