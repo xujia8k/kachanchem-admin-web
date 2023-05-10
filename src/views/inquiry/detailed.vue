@@ -71,7 +71,7 @@
                 <div class="item"><label class="name">纯度:</label>{{ list.purity }}</div>
               </el-col>
               <el-col :span="3" :xs="24">
-                <div class="item"><label class="name">数量:</label>{{ list.package_str }}</div>
+                <div class="item"><label class="name">数量:</label>{{ list.package }}</div>
               </el-col>
               <el-col :span="10" :xs="24">
                 <div class="item"><label class="name">备注:</label>{{ list.note }}</div>
@@ -884,6 +884,9 @@ export default {
       }, {
         value: 'by Express',
         label: 'by Express'
+      }, {
+        value: 'by Air',
+        label: 'by Air'
       }],
       quotationQuery: {
         inquiry_detail_quotation_id: null,

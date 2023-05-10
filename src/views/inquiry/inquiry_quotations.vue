@@ -3,7 +3,7 @@
     <div class="filter-container">
       <el-input v-model.trim="listQuery.inquiry_no" placeholder="请输入询盘订单号" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter"/>
       <el-input v-model.trim="listQuery.q" placeholder="请输入产品名/CAS号" style="width: 200px;margin-left: 5px;" class="filter-item" @keyup.enter.native="handleFilter"/>
-      <el-input v-model.trim="listQuery.company_name" placeholder="请输入客户名称" style="width: 200px;margin-left: 5px;" class="filter-item" @keyup.enter.native="handleFilter"/>
+      <el-input v-model.trim="listQuery.company_name" placeholder="请输入客户公司名称" style="width: 200px;margin-left: 5px;" class="filter-item" @keyup.enter.native="handleFilter"/>
      <!--  <el-date-picker v-model="date" value-format="yyyy-MM-dd HH:mm:ss" class="filter-item ml10" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions" style="width: 250px;margin-left: 5px;"/> -->
       <el-button class="filter-item ml10" type="primary" icon="el-icon-search" @click="handleFilter">
         搜索

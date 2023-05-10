@@ -46,7 +46,7 @@ export function enableFilter(string) {
  * @param {String} string
  */
 export function priceStatusFilter(string) {
-  const statusMap = ['未报价', '已报价', '已成单', '已放弃']
+  const statusMap = ['未报价', '已发送报价', '已完成', '已放弃', '采购已报价']
   return statusMap[string]
 }
 /**
