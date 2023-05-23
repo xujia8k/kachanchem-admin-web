@@ -117,6 +117,11 @@
             </el-form-item>
           </el-col>
           <el-col :span="6">
+            <el-form-item label="纯度" prop="purity">
+              <el-input v-model="temp.purity" placeholder="请输入纯度！" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
             <el-form-item label="MF" prop="mf">
               <el-input v-model="temp.mf" placeholder="请输入MF" />
             </el-form-item>
@@ -139,7 +144,7 @@
               <el-input v-model="temp.weight" placeholder="请输入排序" />
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="24">
             <el-form-item label="是否优势产品" prop="is_advantage">
               <el-radio-group v-model="temp.is_advantage">
                 <el-radio label="0">否</el-radio>
